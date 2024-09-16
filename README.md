@@ -1,111 +1,192 @@
 # neural-network-challenge-1
 
-neural network study
-
-https://bootcampspot.instructure.com/courses/6442/assignments/80401
-
 student_loans_with_deep_learning.ipynb
 
-https://colab.research.google.com/drive/1YaFO2sQDpRw_s_Tar3L8IDRQTr5PB-J9#scrollTo=E-hZaeSn6q61
+https://drive.google.com/file/d/1F00wHiB5Z-yKe9VgMsYJG2RPmye7kbak/view?usp=drive_link
 
-student_loans_with_deep_learning_performance.ipynb
+student_loans_with_deep_learning_performance_reduce.ipynb
 
-https://colab.research.google.com/drive/1tdKl2_3Qdd7w7-3ZlJcW9U48dkxYFB2Z#scrollTo=ogm3_9wo4HAD&uniqifier=1
+https://drive.google.com/file/d/1tdKl2_3Qdd7w7-3ZlJcW9U48dkxYFB2Z/view?usp=drive_link
 
 ### Background
 
-You work at a company that specializes in student loan refinancing. If the company can predict whether a borrower will repay their loan, it can provide a more accurate interest rate for the borrower. Your team has asked you to create a model to predict student loan repayment.
+This project is to utilize data to determine risk in offering student loan refinancing using TensorFlow Neural Network Modeling.
 
-The business team has given you a CSV file that contains information about previous student loan recipients. With your knowledge of machine learning and neural networks, you decide to use the features in the provided dataset to create a model that will predict the likelihood that an applicant will repay their student loans. The CSV file contains information about these students, such as their credit ranking.
+The Source data is a CSV file with information about previous student loan recipients with information about these students, such as their credit ranking.
+
+The goal is to create a create a model to predict student loan repayment.
 
 * Prepare the data for use on a neural network model.
 * Compile and evaluate a model using a neural network.
 * Predict loan repayment success by using your neural network model.
 * Discuss creating a recommendation system for student loans
 
-#### Part 1: Prepare the data for use on a neural network model
+#### Details
 
-Using your knowledge of Pandas and scikit-learn’s `StandardScaler()`, preprocess the dataset so that you can use it to compile and evaluate the neural network model later.
+Created a deep neural network using Tensorflow's Keras model.
 
-Open the starter code file and complete the following data preparation steps:
+Setting y/target dataset: “credit_ranking” column.
 
-1. Read the data from [https://static.bc-edx.com/ai/ail-v-1-0/m18/lms/datasets/student-loans.csv**Links to an external site.**](https://static.bc-edx.com/ai/ail-v-1-0/m18/lms/datasets/student-loans.csv) into a Pandas DataFrame. Review the DataFrame, looking for columns that could eventually define your features and target variables.
-2. Create the features (`X`) and target (`y`) datasets. The target dataset should be defined by the “credit_ranking” column. The remaining columns should define the features dataset.
-3. Split the features and target sets into training and testing datasets.
-4. Use scikit-learn's `StandardScaler` to scale the features data.
+Split and scale X data.  The features used in this model include:
+'payment_history', 'location_parameter', 'stem_degree_score',
+'gpa_ranking', 'alumni_success', 'study_major_code', 'time_to_completion',
+'finance_workshop_score', 'cohort_ranking', 'total_loan_score', 'financial_aid_score'
 
-#### Part 2: Compile and Evaluate a Model Using a Neural Network
+* Review X/feature data for highly correlated data (corr() function, seaborn heatmap, pyplot))
 
-Use your knowledge of TensorFlow to design a deep neural network model. This model should use the dataset’s features to predict the credit quality of a student based on the features in the dataset. Consider the number of inputs before determining the number of layers that your model will contain or the number of neurons on each layer. Then, compile and fit your model. Finally, evaluate the model to calculate its loss and accuracy.
+![1726527403371](image/README/1726527403371.png)
 
-To do so, complete the following steps:
+* Review X/Feature data for Feature Importance (RandomForestClassifier, seaborn):
 
-1. Create a deep neural network by assigning the number of input features, the number of layers, and the number of neurons on each layer using TensorFlow’s Keras.
-   **hint  You can start with a two-layer deep neural network model that uses the `relu` activation function for both layers.**
-2. Compile and fit the model using the `binary_crossentropy` loss function, the `adam` optimizer, and the `accuracy` evaluation metric.
-   **hint  When fitting the model, start with a small number of epochs, such as 50 or 100.**
-3. Evaluate the model using the test data to determine the model’s loss and accuracy.
-4. Save and export your model to a keras file, and name the file `student_loans.keras`.
-   **note:  **Remember to download your saved model from Colab so you can upload it to your GitHub repo.
+![1726527280803](image/README/1726527280803.png)
 
-#### Part 3: Predict loan repayment success by using your neural network model
 
-Use the model you saved in the previous section to make predictions on your reserved testing data.
 
-To do so, complete the following steps:
+**Defined, create and compile the Neural Network model.**  
 
-1. Reload your saved model.
-2. Make predictions on the testing data, saving them to a DataFrame and rounding the predictions to binary values.
-3. Generate a classification report with the predictions and testing data.
+Used a two-layer deep neural network model (Keras Sequential Dense model) that uses the `relu` activation function for both layers:
 
-#### Part 4: Discuss creating a recommendation system for student loans
 
-Briefly answer the following questions in the space provided:
+```
+import tensorflow as tf
 
-1. Describe the data that you would need to collect to build a recommendation system to recommend student loan options for students. Explain why this data would be relevant and appropriate.
+feature_count = len(X.columns)
+hidden_nodes_layer_1 = 32 #perform up from 10
+hidden_nodes_layer_2 = 16 #perform up from 5
+neurons_output_layer = 1
+
+nn_model = Sequential()
+
+nn_model.add(Dense(units=hidden_nodes_layer_1, activation="relu", input_dim = feature_count))
+nn_model.add(Dense(units=hidden_nodes_layer_2, activation="relu"))
+nn_model.add(tf.keras.layers.Dense(units=1, activation="sigmoid"))
+
+nn_model.summary()
+```
+
+![1726526944210](image/README/1726526944210.png)
+
+```
+nn_model.compile(loss="binary_crossentropy", optimizer="adam", metrics=["accuracy"])
+fit_model = nn_model.fit(X_train_scaled, y_train, epochs=200)
+
+```
+
+13/13 - 0s - 14ms/step - accuracy: 0.7600 - loss: 0.6178
+Loss: 0.6177812814712524, Accuracy: 0.7599999904632568
+
+![1726527008178](image/README/1726527008178.png)
+
+![1726527020215](image/README/1726527020215.png)
+
+* Predictions on the testing data were saved to a DataFrame and rounded to binary values.
+* Reviewed model summary and inspect the structure; evaluated the model to calculate its loss and accuracy (data below).
+
+#### Libraries Utilized
+
+* Pandas
+* Tensorflow
+* Keras, Dense and Sequential models
+* sklearn model_selection preprocessing (train_test_split)
+* sklearn preprocessing StandardScaler for scaling data
+* sklearn metrics classification_report
+* numpy, seaborn, matplotlib.pyplot to visualize Correlated Data
+* sklearn.ensemble RandomForestClassifier and seaborn to determine Feature Importance
+* matplotlib.pyplot for additional visualizations
+
+## Predict Loan Repayment Success
+
+Generated a classification report with the predictions and testing data.
+
+Made predictions using reserved testing data.
+
+#### Results 1: student_loans_with_deep_learning.ipynb:
+
+![1726525813286](image/README/1726525813286.png)
+
+**Description of model:**
+student_loans_with_deep_learning_reduced.ipynb
+increased neuons of 1st and 2nd layers to 32/16
+Epochs = 200, which appeared to be plateau for Accuracy/Loss
+
+**Evaluation of model:**
+
+The model performs well overall.  Overall accuracy of 79%
+Model performs similarly for both classes, with slightly better recall for class 1.
+Model is well-balanced (194 instances of Class 0, 206 instances of Class 1)
+and performs consistently across both classes
+
+NOTE: class 0 : bad credit risk; class 1: good credit risk
+
+**Details:**
+Precision (predicted true results were actually true)
+    Class 0: 78% of the instances predicted as class 0 are actually class 0.
+    Class 1: 79%
+
+Recall/Sensitivity (actually true data points were identified correctly):
+    Class 0: model correctly identifies 78% of the actual class instances
+    Class 1: 79%
+
+
+#### Results 2: student_loans_with_deep_learning_performance_reduce.ipynb:
+
+A second model was created to attempt to both improve performance and reduce the Feature columns (see student_loans_with_deep_learning_performance_reduce.ipynb).
+
+Features were reduced to excluding columns that are suspected to be unrelated to the target/outcome (location_parameter, alumni_success, study_major_code), as well as a column that could be causing data leakage (predictive of the outcome)(financial_aid_score).  The number of features was reduced to 7
+
+![1726525997495](image/README/1726525997495.png)
+
+**Description of model:**
+
+For this model, I performed feature reduction, removing perceived unrelated columns and a column suspected of providing a data leak.  
+
+Epochs of 25 appeared to be plateau for Accuracy/Loss (see seaborn charts in ipynb)
+
+**Evaluation of model:**
+
+The model performs well with overall accuracy of 78%.
+Model performs similarly for both classes, with slightly better recall for class 1.
+Model is well-balanced ()194 instances of Class 0, 206 instances of Class 1) and performs consistently across both classes.
+
+Training accuracy was 0.9220 (model correctly predicts the training data with an accuracy of 92.20%), as seen in output in final Epoch of the Train/Fit of the model:
+Epoch 100/100
+38/38 ━━━━━━━━━━━━━━━━━━━━ 0s 2ms/step - accuracy: 0.8690 - loss: 0.3418
+
+*NOTE: class 0 : bad credit risk; class 1: good credit risk*
+
+**Details:**
+**Precision** (predicted true results were actually true)
+
+* Class 0: 81% of the instances predicted as class 0 are actually class 0.
+* Class 1: 76%
+
+**Recall/Sensitivity** (actually true data points were identified correctly):
+
+* Class 0: model correctly identifies 73% of the actual class 1 instances
+* Class 1: model correctly identifies 83% of the actual class 1 instances
+
+
+## Recommendation System for Student Loans
+
+1. Describe the data that you would need to collect to build a recommendation system to recommend student loan options for students
+
+* The features used in this model include:
+  'payment_history', 'location_parameter', 'stem_degree_score',
+  'gpa_ranking', 'alumni_success', 'study_major_code', 'time_to_completion',
+  'finance_workshop_score', 'cohort_ranking', 'total_loan_score', 'financial_aid_score'
+* From each candidate/student, would need their history of payments (of other loans), their address/location, their grades, ranking, major, time to complete their major, scores from the finance workshop, ranking in their cohort, financial aid scores (from the university?) and total loan score for any other loans taken.
+
 2. Based on the data you chose to use in this recommendation system, would your model be using collaborative filtering, content-based filtering, or context-based filtering? Justify why the data you selected would be suitable for your choice of filtering method.
-3. Describe two real-world challenges that you would take into consideration while building a recommendation system for student loans. Explain why these challenges would be of concern for a student loan recommendation system.
+
+* Content-based filtering leverages the attributes of each candidate to make recommendations.  We have this data: grades, major, financial score.
+* Context-based filtering considers the context in which the recommendation is made.  We have data such as location and history of payments.
+* Collaborative filtering is based on user interactions or preferences; we don't have that data available.
+* The recommendation model would be a hybrid of content and context-based filtering.  Content-based can help build a profile; context-based filtering- can be used to customize recommendations based on the user's context.
+
+2. Describe two real-world challenges that you would take into consideration while building a recommendation system for student loans. Explain why these challenges would be of concern for a student loan recommendation system.
+
+* Most of this data is highly sensitive: financial, grades, location, etc.  Use of the data would require consent and would have to be handled/maintained  carefully.
+* Financial aid applications might contain information about race/gender, which would be sensitive information to use to determine if a loan will be granted.  Using attribues like race/gender, and even major and financial aid might insert biases into the recommendation engine.
 
 
-
-----------------------------------------------------------------------------------------------------------------------------------------------
-
-Scoring:
-
-#### Prepare the Data for Use on a Neural Network Model (15 points)
-
-* [ ] Two datasets were created: a target (`y`) dataset, which includes the "credit_ranking" column, and a features (`X`) dataset, which includes the other columns. (5 points)
-* [ ] The features and target sets have been split into training and testing datasets. (5 points)
-* [ ] Scikit-learn's `StandardScaler` was used to scale the features data. (5 points)
-
-#### Compile and Evaluate a Model Using a Neural Network (30 points)
-
-* [ ] A deep neural network was created with appropriate parameters. (10 points)
-* [ ] The model was compiled and fit using the `accuracy` loss function, the `adam` optimizer, the `accuracy` evaluation metric, and a small number of epochs, such as 50 or 100. (10 points)
-* [ ] The model was evaluated using the test data to determine its loss and accuracy. (5 points)
-* [ ] The model was saved and exported to a keras file named `student_loans.keras`. (5 points)
-
-#### Predict Loan Repayment Success by Using your Neural Network Model (25 points)
-
-* [ ] The saved model was reloaded. (5 points)
-* [ ] The reloaded model was used to make binary predictions on the testing data. (10 points)
-* [ ] A classification report is generated for the predictions and the testing data. (10 points)
-
-#### Discuss creating a recommendation system for student loans (30 points)
-
-**For Question 1:**
-
-* [ ] The response describes the data that should be collected to build a recommendation system for student loan options. (4 points)
-* [ ] The response explains why they think that data should be collected. (4 points)
-* [ ] The type of data described is appropriate for a recommendation system for student loan options. (2 points)
-
-**For Question 2:**
-
-* [ ] The response chose a filtering method. (4 points)
-* [ ] The student justified the choice of their filtering method. (4 points)
-* [ ] The choice of filtering method was appropriate for the data selected in the previous question. (2 points)
-
-**For Question 3:**
-
-* [ ] The response lists two real-world challenges with building a recommendation system for student loans. (4 points)
-* [ ] The response explains why these challenges would be of concern for a student loan recommendation system. (6 points)
+---
