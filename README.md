@@ -4,7 +4,13 @@ neural network study
 
 https://bootcampspot.instructure.com/courses/6442/assignments/80401
 
+student_loans_with_deep_learning.ipynb
 
+https://colab.research.google.com/drive/1YaFO2sQDpRw_s_Tar3L8IDRQTr5PB-J9#scrollTo=E-hZaeSn6q61
+
+student_loans_with_deep_learning_performance.ipynb
+
+https://colab.research.google.com/drive/1tdKl2_3Qdd7w7-3ZlJcW9U48dkxYFB2Z#scrollTo=ogm3_9wo4HAD&uniqifier=1
 
 ### Background
 
@@ -12,12 +18,10 @@ You work at a company that specializes in student loan refinancing. If the compa
 
 The business team has given you a CSV file that contains information about previous student loan recipients. With your knowledge of machine learning and neural networks, you decide to use the features in the provided dataset to create a model that will predict the likelihood that an applicant will repay their student loans. The CSV file contains information about these students, such as their credit ranking.
 
-
 * Prepare the data for use on a neural network model.
 * Compile and evaluate a model using a neural network.
 * Predict loan repayment success by using your neural network model.
 * Discuss creating a recommendation system for student loans
-
 
 #### Part 1: Prepare the data for use on a neural network model
 
@@ -64,6 +68,7 @@ Briefly answer the following questions in the space provided:
 
 
 
+----------------------------------------------------------------------------------------------------------------------------------------------
 
 Scoring:
 
