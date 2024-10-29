@@ -1,148 +1,105 @@
-# neural-network-challenge-1
+# Student Loan Repayment Prediction with Deep Learning
 
-student_loans_with_deep_learning.ipynb
+This project aims to predict student loan repayment success using an improved deep neural network model built with TensorFlow's Keras library. Enhanced preprocessing, feature selection using Random Forest were applied to improve the model's performance. The dataset contains information on previous student loan recipients, including various academic, financial, and demographic factors.
 
-https://drive.google.com/file/d/1F00wHiB5Z-yKe9VgMsYJG2RPmye7kbak/view?usp=drive_link
+**[Project Workflow](#project-workflow)** | **[Modeling](#modeling)** | **[Interpretation and Insights](#interpretation-and-insights)** | **[Follow-On Studies](#follow-on-studies)**
 
-student_loans_with_deep_learning_performance_reduce.ipynb
+---
 
-https://drive.google.com/file/d/1tdKl2_3Qdd7w7-3ZlJcW9U48dkxYFB2Z/view?usp=drive_link
+## Abstract
 
-### Background
+This project involves building a deep neural network to predict student loan repayment success based on data from previous student loan recipients. The steps include extensive data preprocessing, feature selection, building and evaluating a deep learning model, and analyzing feature importance. The goal is to enhance prediction accuracy and provide actionable insights for loan approval decision-making.
 
-This project is to utilize data to determine risk in offering student loan refinancing using TensorFlow Neural Network Modeling.
+---
 
-The Source data is a CSV file with information about previous student loan recipients with information about these students, such as their credit ranking.
+## Core Technologies, Tools
 
-The goal is to create a create a model to predict student loan repayment.
+Deep Learning, Neural Networks, Data Preprocessing, Feature Selection, Predictive Modeling, Data Visualization.
 
-* Prepare the data for use on a neural network model.
-* Compile and evaluate a model using a neural network.
-* Predict loan repayment success by using your neural network model.
-* Discuss creating a recommendation system for student loans
+* **Languages/Tools:** Python, Jupyter Notebook, Google Colab
+* **Data Pre-Processing**: Pandas for data manipulation and cleaning; Scikit-learn `train_test_split` for splitting data into training and testing sets; Scikit-learn `StandardScaler` for scaling data before training
+* **Model Building and Training:** TensorFlow and Keras (Sequential, Dense layers) for building and training the deep neural network
+* **Evaluation and Performance:** Scikit-learn `classification_report` for evaluating model performance using accuracy, precision, recall, and F1 scores
+* **Feature Selection, Importance, and Data Reduction:** Scikit-learn `RandomForestClassifier` and Seaborn for determining feature importance
+* **Data Visualization: NumPy,** Seaborn, and Matplotlib for visualizing correlations and other insights
 
-#### Details
+---
 
-Created a deep neural network using Tensorflow's Keras model.
+## Project Workflow
 
-Setting y/target dataset: “credit_ranking” column.
+#### **Data Collection**
 
-Split and scale X data.  The features used in this model include:
-'payment_history', 'location_parameter', 'stem_degree_score',
-'gpa_ranking', 'alumni_success', 'study_major_code', 'time_to_completion',
-'finance_workshop_score', 'cohort_ranking', 'total_loan_score', 'financial_aid_score'
+* Loaded the dataset from an external CSV file containing student loan recipient information with features such as payment history, GPA ranking, time to completion, financial aid score, etc.
 
-* Review X/feature data for highly correlated data (corr() function, seaborn heatmap, pyplot))
+#### **Feature Transformation**
 
-![1726527403371](image/README/1726527403371.png)
+* **Scaling Features** : `StandardScaler` applied to normalize the features, improving model convergence and training stability.
+* **Encoding** : Converted the target column, `credit_ranking`, into a format compatible with the deep learning model.
 
-* Review X/Feature data for Feature Importance (RandomForestClassifier, seaborn):
+#### **Exploratory Data Analysis (EDA)**
 
-![1726527280803](image/README/1726527280803.png)
+For the model, I performed feature reduction, removing perceived unrelated columns and a column suspected of providing a data leak.
 
+* ****Feature Importance Visualization** :** Used Random Forest classifier feature importance attribute and Seaborn to create a bar plot showcasing the importance of various features **(fig 1).**
+* **Correlation Analysis** : Visualized feature correlations by calculating correlation matrix and using a heatmap to identify highly correlated variables and remove redundant features **(fig 2).**
+* Additional features were dropped due to irrelevance and possible source of data leakage.
 
+<figure>
+    <figcaption><em>fig 1.</em></figcaption>
+    <img src="images/1726527280803.png" height="500"
+         alt="1726527280803.png">
+</figure>
 
-**Defined, create and compile the Neural Network model.**  
+<figure>
+    <figcaption><em>fig 2.</em></figcaption>
+    <img src="images/1726527403371.png" height="500"
+         alt="1726527403371.png">
+</figure>
 
-Used a two-layer deep neural network model (Keras Sequential Dense model) that uses the `relu` activation function for both layers:
+---
 
+## Modeling
 
-```
-import tensorflow as tf
+#### **Model Selection**
 
-feature_count = len(X.columns)
-hidden_nodes_layer_1 = 32 #perform up from 10
-hidden_nodes_layer_2 = 16 #perform up from 5
-neurons_output_layer = 1
+* **Deep Neural Network (DNN)** : Created deep learning model using TensorFlow's Keras API to predict student loan repayment success.
+* **Neural Network Setup** :
+* Created `Sequential` model with multiple dense layers, using `relu` activation function for the first two hidden layers. Included dropout to prevent overfitting.  Compiled and fit Keras Sequential model with `binary_crossentropy` loss function, the `adam` optimizer, and the `accuracy` evaluation metric.
 
-nn_model = Sequential()
+<figure>
+    <figcaption><em>fig 3.</em></figcaption>
+    <img src="images/1730229107313.png" height="360"
+         alt="1730229107313.png">
+</figure>
 
-nn_model.add(Dense(units=hidden_nodes_layer_1, activation="relu", input_dim = feature_count))
-nn_model.add(Dense(units=hidden_nodes_layer_2, activation="relu"))
-nn_model.add(tf.keras.layers.Dense(units=1, activation="sigmoid"))
+#### **Hyperparameter Tuning**
 
-nn_model.summary()
-```
+* Tuned parameters such as the number of layers, to enhance model accuracy and reduce overfitting.
+* Created DataFrame of the model_fit_history in order to plot elbow curve of **Epochs vs Loss** and **Epochs vs. Accuracy** to determine optimal Epochs for training.  Epochs of 25 appeared to be plateau for Accuracy/Loss (see seaborn charts in ipynb)
 
-![1726526944210](image/README/1726526944210.png)
-
-```
-nn_model.compile(loss="binary_crossentropy", optimizer="adam", metrics=["accuracy"])
-fit_model = nn_model.fit(X_train_scaled, y_train, epochs=200)
-
-```
-
-13/13 - 0s - 14ms/step - accuracy: 0.7600 - loss: 0.6178
-Loss: 0.6177812814712524, Accuracy: 0.7599999904632568
-
-![1726527008178](image/README/1726527008178.png)
-
-![1726527020215](image/README/1726527020215.png)
-
-* Predictions on the testing data were saved to a DataFrame and rounded to binary values.
-* Reviewed model summary and inspect the structure; evaluated the model to calculate its loss and accuracy (data below).
-
-#### Libraries Utilized
-
-* Pandas
-* Tensorflow
-* Keras, Dense and Sequential models
-* sklearn model_selection preprocessing (train_test_split)
-* sklearn preprocessing StandardScaler for scaling data
-* sklearn metrics classification_report
-* numpy, seaborn, matplotlib.pyplot to visualize Correlated Data
-* sklearn.ensemble RandomForestClassifier and seaborn to determine Feature Importance
-* matplotlib.pyplot for additional visualizations
-
-## Predict Loan Repayment Success
-
-Generated a classification report with the predictions and testing data.
-
-Made predictions using reserved testing data.
-
-#### Results 1: student_loans_with_deep_learning.ipynb:
-
-![1726525813286](image/README/1726525813286.png)
-
-**Description of model:**
-student_loans_with_deep_learning_reduced.ipynb
-increased neuons of 1st and 2nd layers to 32/16
-Epochs = 200, which appeared to be plateau for Accuracy/Loss
-
-**Evaluation of model:**
-
-The model performs well overall.  Overall accuracy of 79%
-Model performs similarly for both classes, with slightly better recall for class 1.
-Model is well-balanced (194 instances of Class 0, 206 instances of Class 1)
-and performs consistently across both classes
-
-NOTE: class 0 : bad credit risk; class 1: good credit risk
-
-**Details:**
-Precision (predicted true results were actually true)
-    Class 0: 78% of the instances predicted as class 0 are actually class 0.
-    Class 1: 79%
-
-Recall/Sensitivity (actually true data points were identified correctly):
-    Class 0: model correctly identifies 78% of the actual class instances
-    Class 1: 79%
+<figure>
+    <figcaption><em>fig 4.</em></figcaption>
+    <img src="images/1726527008178.png" height="500"
+         alt="1726527008178.png">
+</figure>
 
 
-#### Results 2: student_loans_with_deep_learning_performance_reduce.ipynb:
+<figure>
+    <figcaption><em>fig 5.</em></figcaption>
+    <img src="images/1726527020215.png" height="500"
+         alt="1726527020215.png">
+</figure>
 
-A second model was created to attempt to both improve performance and reduce the Feature columns (see student_loans_with_deep_learning_performance_reduce.ipynb).
 
-Features were reduced to excluding columns that are suspected to be unrelated to the target/outcome (location_parameter, alumni_success, study_major_code), as well as a column that could be causing data leakage (predictive of the outcome)(financial_aid_score).  The number of features was reduced to 7
+#### **Evaluation and Scoring***.*
 
-![1726525997495](image/README/1726525997495.png)
+**Evaluation Metrics** : Accuracy, Precision, Recall, and F1 score were used to assess model performance on the test dataset.
 
-**Description of model:**
-
-For this model, I performed feature reduction, removing perceived unrelated columns and a column suspected of providing a data leak.  
-
-Epochs of 25 appeared to be plateau for Accuracy/Loss (see seaborn charts in ipynb)
-
-**Evaluation of model:**
+<figure>
+    <figcaption><em>fig 6.</em></figcaption>
+    <img src="images/1730231090534.png" height="400"
+         alt="1730231090534.png">
+</figure
 
 The model performs well with overall accuracy of 78%.
 Model performs similarly for both classes, with slightly better recall for class 1.
@@ -152,41 +109,35 @@ Training accuracy was 0.9220 (model correctly predicts the training data with an
 Epoch 100/100
 38/38 ━━━━━━━━━━━━━━━━━━━━ 0s 2ms/step - accuracy: 0.8690 - loss: 0.3418
 
-*NOTE: class 0 : bad credit risk; class 1: good credit risk*
+---
+
+## Interpretation and Insights
+
+* **Feature Importance** : The feature `payment_history` was found to be the most influential in predicting loan repayment success, along with `financial_aid_score` and `gpa_ranking`.
+* **Model Performance** : The model performs well with overall accuracy of 78%.
+
+Model performs similarly for both classes, with slightly better recall for class 1.
+Model is well-balanced 194 instances of Class 0, 206 instances of Class 1) and performs consistently across both classes.
 
 **Details:**
 **Precision** (predicted true results were actually true)
 
 * Class 0: 81% of the instances predicted as class 0 are actually class 0.
-* Class 1: 76%
+* Class 1: 76% of the instances predicted as class 1 are actually class 1.
 
 **Recall/Sensitivity** (actually true data points were identified correctly):
 
 * Class 0: model correctly identifies 73% of the actual class 1 instances
 * Class 1: model correctly identifies 83% of the actual class 1 instances
 
-
-## Recommendation System for Student Loans
-
-1. Describe the data that you would need to collect to build a recommendation system to recommend student loan options for students
-
-* The features used in this model include:
-  'payment_history', 'location_parameter', 'stem_degree_score',
-  'gpa_ranking', 'alumni_success', 'study_major_code', 'time_to_completion',
-  'finance_workshop_score', 'cohort_ranking', 'total_loan_score', 'financial_aid_score'
-* From each candidate/student, would need their history of payments (of other loans), their address/location, their grades, ranking, major, time to complete their major, scores from the finance workshop, ranking in their cohort, financial aid scores (from the university?) and total loan score for any other loans taken.
-
-2. Based on the data you chose to use in this recommendation system, would your model be using collaborative filtering, content-based filtering, or context-based filtering? Justify why the data you selected would be suitable for your choice of filtering method.
-
-* Content-based filtering leverages the attributes of each candidate to make recommendations.  We have this data: grades, major, financial score.
-* Context-based filtering considers the context in which the recommendation is made.  We have data such as location and history of payments.
-* Collaborative filtering is based on user interactions or preferences; we don't have that data available.
-* The recommendation model would be a hybrid of content and context-based filtering.  Content-based can help build a profile; context-based filtering- can be used to customize recommendations based on the user's context.
-
-2. Describe two real-world challenges that you would take into consideration while building a recommendation system for student loans. Explain why these challenges would be of concern for a student loan recommendation system.
-
-* Most of this data is highly sensitive: financial, grades, location, etc.  Use of the data would require consent and would have to be handled/maintained  carefully.
-* Financial aid applications might contain information about race/gender, which would be sensitive information to use to determine if a loan will be granted.  Using attribues like race/gender, and even major and financial aid might insert biases into the recommendation engine.
-
+NOTE: class 0 : high-risk credit risk; class 1: low-risk credit risk
 
 ---
+
+## Follow-On Studies
+
+*Suggested future data processing, modeling, and investigations.*
+
+* Perform additional hyperparameter optimization using methods like Grid Search or Bayesian Optimization.
+* Incorporate macroeconomic indicators (e.g., unemployment rate, inflation) to improve the robustness of the model.
+* Explore alternative machine learning models such as Gradient Boosting or XGBoost for comparison.
