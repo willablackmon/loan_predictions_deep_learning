@@ -1,6 +1,6 @@
-# Student Loan Repayment Prediction with Deep Learning
+# Student Loan Repayment Prediction with Deep Learning Model
 
-This project aims to predict student loan repayment success using an improved deep neural network model built with TensorFlow's Keras library. Enhanced preprocessing, feature selection using Random Forest were applied to improve the model's performance. The dataset contains information on previous student loan recipients, including various academic, financial, and demographic factors.
+This project aims to predict student loan repayment success using a deep neural network model built with TensorFlow's Keras library. Enhanced preprocessing, feature selection using Random Forest were applied to improve the model's performance. The dataset contains information on previous student loan recipients, including various academic, financial, and demographic factors.
 
 **[Project Workflow](#project-workflow)** | **[Modeling](#modeling)** | **[Interpretation and Insights](#interpretation-and-insights)** | **[Follow-On Studies](#follow-on-studies)**
 
@@ -83,13 +83,11 @@ For the model, I performed feature reduction, removing perceived unrelated colum
          alt="1726527008178.png">
 </figure>
 
-
 <figure>
     <figcaption><em>fig 5.</em></figcaption>
     <img src="images/1726527020215.png" height="500"
          alt="1726527020215.png">
 </figure>
-
 
 #### **Evaluation and Scoring***.*
 
